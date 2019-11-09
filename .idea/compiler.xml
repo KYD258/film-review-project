@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="filmreview-eureka-server" />
+        <module name="filmreview-model" />
+        <module name="filmreview-springboot-admin" />
+        <module name="filmreview-zipkin" />
+        <module name="filmreview-zuul" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="filmreview-eureka-server" target="1.8" />
+      <module name="filmreview-model" target="1.8" />
+      <module name="filmreview-parent" target="1.8" />
+      <module name="filmreview-springboot-admin" target="1.8" />
+      <module name="filmreview-zipkin" target="1.8" />
+      <module name="filmreview-zuul" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
