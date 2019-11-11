@@ -13,6 +13,7 @@ public class Commodity {
     private String commodityName;
     private String commodityPic;
     private String description;
+    private Double commodityPrice;
     private Integer commodityNum;
     private Date addTime;
     private Date outTime;
