@@ -13,9 +13,9 @@ public class Creation {
     @Column(name = "creation_id")
     private Integer creationId;
     @Column(name = "creation_pic")
-    private Integer creationPic;
+    private String creationPic;
     @Column(name = "article")
-    private Integer article;
+    private String article;
     @Column(name = "creation_status")
     private Integer creationStatus;
 }

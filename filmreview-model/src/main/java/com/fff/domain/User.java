@@ -13,23 +13,23 @@ public class User {
     @Column(name = "user_id")
     private Integer userId;
     @Column(name = "user_name")
-    private Integer userName;
+    private String userName;
     @Column(name = "real_name")
-    private Integer realName;
+    private String realName;
     @Column(name = "password")
-    private Integer password;
+    private String password;
     @Column(name = "age")
     private Integer age;
     @Column(name = "gender")
-    private Integer gender;
+    private String gender;
     @Column(name = "user_pic")
-    private Integer userPic;
+    private String userPic;
     @Column(name = "phone")
     private Integer phone;
     @Column(name = "email")
-    private Integer email;
+    private String email;
     @Column(name = "user_status")
     private Integer userStatus;
     @Column(name = "address")
-    private Integer address;
+    private String address;
 }

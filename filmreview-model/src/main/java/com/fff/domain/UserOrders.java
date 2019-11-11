@@ -15,7 +15,7 @@ public class UserOrders {
     @Column(name = "user_id")
     private Integer userId;
     @Column(name = "order_num")
-    private Integer orderNum;
+    private String orderNum;
     @Column(name = "commodity_id")
     private Integer commodityId;
     @Column(name = "order_status")
