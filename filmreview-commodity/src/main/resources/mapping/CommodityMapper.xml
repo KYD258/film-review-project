@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fff.dao.CommodityMapper">
+<!--
+    private Integer commodityId;
+    private String commodityName;
+    private String commodityPic;
+    private String description;
+    private Integer commodityNum;
+    private Date addTime;
+    private Date outTime;
+    private String commodityInfo1;
+-->
+    <resultMap id="baseResultMap" type="com.fff.domain.Commodity">
+        <id property="commodityId" column="commodity_id"></id>
+        <result property="commodityName" column="commodity_name"></result>
+        <result property="commodityPic" column="commodity_pic"></result>
+        <result property="description" column="description"></result>
+        <result property="commodityNum" column="commodity_num"></result>
+        <result property="commodityPrice" column="commodity_price"></result>
+        <result property="addTime" column="addTime"></result>
+        <result property="outTime" column="outTime"></result>
+        <result property="commodityInfo1" column="commodity_info1"></result>
+    </resultMap>
+
+    <sql id="baseSql1">
+        (commodity_id, commodity_name, commodity_pic, description, commodity_num,commodity_price, addTime, outTime, commodity_info1)
+    </sql>
+    <sql id="baseSql2">
+        (commodity_name, commodity_pic, description, commodity_num, commodity_price, addTime, outTime, commodity_info1)
+    </sql>
+
+    <insert id="saveCommodity" parameterType="com.fff.domain.Commodity">
+        insert into commodity
+        <include refid="baseSql2"></include>
+        value (#{commodityName},#{commodityPic},#{description},#{commodityNum},#{commodityPrice},#{addTime},#{outTime},#{commodityInfo1})
+    </insert>
+
+    <delete id="deleteCommodityById" parameterType="int">
+        delete from commodity where commodity_id = #{commodityId}
+    </delete>
+
+    <select id="findCommodity" resultMap="baseResultMap">
+        select
+        <include refid="baseSql1"></include>
+        from commodity
+    </select>
+
+    <select id="findCommodityById" resultMap="baseResultMap" parameterType="int">
+        select
+        <include refid="baseSql1"></include>
+        where commodity_id = #{commodityId}
+    </select>
+
+    <update id="updateCommodity" parameterType="int">
+        update commodity
+        <set>
+            <if test="commodityName != null and commodityName != ''">
+                commodity_name = #{commodityName},
+            </if>
+            <if test="commodityPic != null and commodityPic != ''">
+                commodity_pic = #{commodityPic},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="commodityNum != null and commodityNum != ''">
+                commodity_num = #{commodityNum},
+            </if>
+            <if test="outTime != null and outTime != ''">
+                outTime = #{outTime},
+            </if>
+            <if test="commodityInfo1 != null and commodityInfo1 != ''">
+                commodity_info1 = #{commodityInfo1}
+            </if>
+        </set>
+        where commodity_id = #{commodityId}
+    </update>
+</mapper>    
