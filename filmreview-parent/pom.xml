@@ -14,6 +14,7 @@
         <module>../filmreview-springboot-admin</module>
         <module>../filmreview-zipkin</module>
         <module>../filmreview-model</module>
+        <module>../filmreview-commodity</module>
     </modules>
 
     <parent>
@@ -104,6 +105,37 @@
                 <groupId>com.fff</groupId>
                 <artifactId>filmreview-model</artifactId>
                 <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <!--七牛云-->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>7.2.11</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>1.0.26</version>
+            </dependency>
+            <!--log日志-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId>
+            </dependency>
+            <!--支付-->
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>3.3.49.ALL</version>
+            </dependency>
+            <!--消息队列-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-amqp</artifactId>
             </dependency>
         </dependencies>
     </dependencyManagement>
