@@ -2,6 +2,7 @@ package com.fff.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.fff.dao.CommodityMapper;
+import com.fff.dao.SearchInterface;
 import com.fff.domain.Commodity;
 import com.fff.service.CommodityService;
 import com.fff.utils.UploadUtils;
@@ -18,6 +19,8 @@ public class CommodityServiceImpl implements CommodityService {
     @Autowired
     private CommodityMapper commodityMapper;
     @Autowired
+    private SearchInterface searchInterface;
+    @Autowired
     private UploadUtils uploadUtils;
 
     @Override
@@ -26,7 +29,11 @@ public class CommodityServiceImpl implements CommodityService {
         int saveCommodity = commodityMapper.saveCommodity(commodity);
         if (saveCommodity > 0){
 //            加入es库中
-            return true;
+            Boolean toEs = searchInterface.saveCommodityToEs(commodity);
+            System.out.println(toEs);
+            if (toEs!=null && toEs){
+                return true;
+            }
         }
         return false;
     }
@@ -40,7 +47,11 @@ public class CommodityServiceImpl implements CommodityService {
     public boolean deleteCommodityById(Integer id) {
         if (commodityMapper.deleteCommodityById(id) > 0){
 //            删除es中该条数据
-            return true;
+            Boolean fromEs = searchInterface.deleteCommodityFromEs(id);
+            System.out.println(fromEs+"--------------");
+            if (fromEs != null && fromEs){
+                return true;
+            }
         }
         return false;
     }
@@ -54,7 +65,11 @@ public class CommodityServiceImpl implements CommodityService {
     public boolean updateCommodity(Commodity commodity) {
         if (commodityMapper.updateCommodity(commodity) > 0){
 //            修改es中该条数据
-            return true;
+            Boolean inEs = searchInterface.updateCommodityInEs(commodity);
+            System.out.println(inEs+"--------------");
+            if (inEs != null && inEs){
+                return true;
+            }
         }
         return false;
     }

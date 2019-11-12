@@ -4,10 +4,7 @@ import com.fff.commons.R;
 import com.fff.domain.Commodity;
 import com.fff.service.CommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -33,15 +30,15 @@ public class CommodityController {
         return R.error();
     }
 
-    @RequestMapping("/deleteCommodity")
-    public R deleteCommodity(@PathVariable("id") Integer id){
-        if (commodityService.deleteCommodityById(id)){
-            R.ok();
+    @RequestMapping(value = "/deleteCommodity",method = RequestMethod.POST)
+    public R deleteCommodity(@RequestParam("id") Integer commodityId){
+        if (commodityService.deleteCommodityById(commodityId)){
+            return R.ok();
         }
         return R.error();
     }
 
-    @RequestMapping("/findCommodityById")
+    @RequestMapping("/findCommodityById/{id}")
     public Commodity findCommodityById(@PathVariable("id") Integer id){
         Commodity commodity = commodityService.findCommodityById(id);
         return commodity;
