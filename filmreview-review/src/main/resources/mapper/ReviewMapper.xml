@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!--public interface ReviewMapper {
+    List<Review> findByUserId(Integer userId);
+}
+-->
+<mapper namespace="com.fff.dao.ReviewMapper">
+    <select id="findByUserId" resultType="java.util.List" parameterType="java.lang.Integer">
+      select
+        r.review_id,
+        r.review_content,
+        r.review_createTime,
+        r.video_id
+      FROM user u,user_review ur,review r
+      WHERE u.user_id=ur.user_id and ur.review_id=r.review_id and u.user_id=#{userId}
+    </select>
+</mapper>
