@@ -16,7 +16,7 @@ public interface CommodityService{
     boolean updateCommodity(Commodity commodity);
 //  获取图片地址
     String getCommodityPicPath(MultipartFile file);
-//  根据id差一条
+//  根据id查一条
     Commodity findCommodityById(Integer id);
 
 }

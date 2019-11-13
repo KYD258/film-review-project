@@ -24,13 +24,13 @@
     </resultMap>
 
     <sql id="baseSql1">
-        (commodity_id, commodity_name, commodity_pic, description, commodity_num,commodity_price, addTime, outTime, commodity_info1)
+        commodity_id, commodity_name, commodity_pic, description, commodity_num, commodity_price, addTime, outTime, commodity_info1
     </sql>
     <sql id="baseSql2">
         (commodity_name, commodity_pic, description, commodity_num, commodity_price, addTime, outTime, commodity_info1)
     </sql>
 
-    <insert id="saveCommodity" parameterType="com.fff.domain.Commodity">
+    <insert id="saveCommodity" parameterType="com.fff.domain.Commodity" useGeneratedKeys="true" keyProperty="commodityId">
         insert into commodity
         <include refid="baseSql2"></include>
         value (#{commodityName},#{commodityPic},#{description},#{commodityNum},#{commodityPrice},#{addTime},#{outTime},#{commodityInfo1})
@@ -49,6 +49,7 @@
     <select id="findCommodityById" resultMap="baseResultMap" parameterType="int">
         select
         <include refid="baseSql1"></include>
+        from commodity
         where commodity_id = #{commodityId}
     </select>
 
@@ -66,6 +67,9 @@
             </if>
             <if test="commodityNum != null and commodityNum != ''">
                 commodity_num = #{commodityNum},
+            </if>
+            <if test="commodityPrice != null and commodityPrice != ''">
+                commodity_price = #{commodityPrice},
             </if>
             <if test="outTime != null and outTime != ''">
                 outTime = #{outTime},
