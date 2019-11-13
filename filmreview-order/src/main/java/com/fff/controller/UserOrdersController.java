@@ -2,13 +2,12 @@ package com.fff.controller;
 
 import com.fff.commons.R;
 import com.fff.domain.UserOrders;
-import com.fff.responses.GetOrders;
+import com.fff.commons.GetOrders;
 import com.fff.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sun.rmi.log.LogInputStream;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -25,9 +24,9 @@ public class UserOrdersController {
 
     /*支付成功订单的添加状态1表示已支付0未支付*/
     @RequestMapping("/addOrder")
-    public UserOrders addOrder(@RequestBody UserOrders userOrders) {
-        UserOrders userOrders1 = ordersService.addOrder(userOrders);
-        return userOrders1;
+    public R addOrder(@RequestBody UserOrders userOrders) {
+        ordersService.addOrder(userOrders);
+        return R.ok();
     }
 
     /*订单的删除*/
@@ -53,7 +52,7 @@ public class UserOrdersController {
         return getOrders;
     }
 
-    /*wei支付订单查询*/
+    /*未支付订单查询*/
 
     @RequestMapping("/noPayOrder")
 
@@ -61,6 +60,27 @@ public class UserOrdersController {
         Integer userId = (Integer) session.getAttribute("userId");
         List<GetOrders> getOrders = ordersService.noPayOrder(userId);
         return getOrders;
+    }
+
+    /*订单修改*/
+    @RequestMapping("/updateOrder")
+    public UserOrders updateOrder(UserOrders userOrders){
+        String orderNum = userOrders.getOrderNum();
+        ordersService.updateStatus(orderNum);
+        return userOrders;
+    }
+
+    /*根据订单号查订单*/
+    @RequestMapping("/findByOrderNum")
+    public UserOrders findByOrderNum(String orderNum){
+        return ordersService.findByOrderNum(orderNum);
+    }
+
+    /*根据用户id查价格*/
+    @RequestMapping("/findPriceByUserId")
+    public Double findPriceByUserId(HttpSession session){
+        Integer userId = (Integer) session.getAttribute("userId");
+        return ordersService.findPriceByUserId(userId);
     }
 
 }

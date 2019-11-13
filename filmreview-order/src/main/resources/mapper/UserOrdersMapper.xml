@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fff.dao.UserOrdersMapper">
+
+    <!--  List<GetOrders> findAllOrder(Integer userId);-->
+<select id="findAllOrder" resultType="com.fff.commons.GetOrders" parameterType="java.lang.Integer">
+    select * from user_orders uo , commodity c
+    where uo.commodity_id=c.commodity_id and user_id=#{userId}
+
+</select>
+<!-- List<GetOrders> payOrder(Integer userId);-->
+ <select id="payOrder" resultType="com.fff.commons.GetOrders" parameterType="java.lang.Integer">
+    select * from user_orders uo , commodity c
+    where uo.commodity_id=c.commodity_id and uo.order_status=1 and user_id=#{userId}
+</select>
+    <!--/*查询wei支付订单*/
+    List<GetOrders> noPayOrder(Integer userId);-->
+<select id="noPayOrder" resultType="com.fff.commons.GetOrders" parameterType="java.lang.Integer">
+    select * from user_orders uo , commodity c
+    where uo.commodity_id=c.commodity_id and uo.order_status=0 and user_id=#{userId}
+</select>
+
+    <!--修改订单状态-->
+    <update id="updateStatus" parameterType="java.lang.String">
+      update user_orders set order_status=1 where order_num=#{orderNum}
+    </update>
+
+    <!--Integer findPriceByUserId(Integer userId);-->
+    <!--TODO 未完成-->
+    <select id="countPrice" resultType="java.lang.Double">
+          SELECT sum(co.commodity_price) FROM commodity co, user_orders uo,user u
+       WHERE uo.user_id=u.user_id AND co.commodity_id=uo.commodity_id AND u.user_id=#{userId} AND uo.order_status=0
+    </select>
+</mapper>
