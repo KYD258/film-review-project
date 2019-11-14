@@ -3,17 +3,37 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-
 <!--public interface ReviewMapper {
     List<Review> findByUserId(Integer userId);
 }
 -->
 <mapper namespace="com.fff.dao.ReviewMapper">
-    <select id="findByUserId" resultType="java.util.List" parameterType="java.lang.Integer">
+    <resultMap id="ResultMap" type="com.fff.commons.GetReview">
+        <id property="reviewId" column="review_id"></id>
+        <result property="reviewContent" column="review_content"></result>
+        <result property="reviewCreateTime" column="review_create_time"></result>
+        <result property="userName" column="user_name"></result>
+    </resultMap>
+
+    <resultMap id="ResultMap1" type="com.fff.domain.Review">
+        <id property="reviewId" column="review_id"></id>
+        <result property="reviewContent" column="review_content"></result>
+        <result property="reviewCreateTime" column="review_create_time"></result>
+        <result property="videoId" column="video_id"></result>
+    </resultMap>
+
+    <!--public List<GetOrders> findByVideoId(Integer videoId);-->
+
+    <select id="findByVideoId"  resultMap="ResultMap" parameterType="java.lang.Integer">
+      select r.review_id,r.review_content,r.review_create_time,u.user_name
+      from user u,user_review ur,review r
+      where u.user_id=ur.user_id and ur.review_id=r.review_id and r.video_id=#{videoId}
+    </select>
+    <select id="findByUserId" resultMap="ResultMap1" parameterType="java.lang.Integer">
       select
         r.review_id,
         r.review_content,
-        r.review_createTime,
+        r.review_create_time,
         r.video_id
       FROM user u,user_review ur,review r
       WHERE u.user_id=ur.user_id and ur.review_id=r.review_id and u.user_id=#{userId}

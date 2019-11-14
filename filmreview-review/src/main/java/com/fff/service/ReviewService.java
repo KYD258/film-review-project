@@ -1,5 +1,7 @@
 package com.fff.service;
 
+import com.fff.commons.GetOrders;
+import com.fff.commons.GetReview;
 import com.fff.domain.Review;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public interface ReviewService {
     List<Review> findAllReview();
 
     //  查询该电影的所有评论
-    List<Review> findReviewByVideoId(Integer videoId);
+    List<GetReview> findReviewByVideoId(Integer videoId);
 
     //  查询该用户的所有评论
     List<Review> findReviewByUserId(Integer userId);

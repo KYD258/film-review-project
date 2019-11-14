@@ -1,6 +1,8 @@
 package com.fff.controller;
 
+import com.fff.commons.GetReview;
 import com.fff.domain.Review;
+import com.fff.domain.User;
 import com.fff.domain.Video;
 import com.fff.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +46,13 @@ public class ReviewController {
     }
 
     @RequestMapping("/findByVideoId")
-    public List<Review> findReviewByVideoId(@RequestBody Video video) {
+    public List<GetReview> findReviewByVideoId(@RequestBody Video video) {
         return reviewService.findReviewByVideoId(video.getVideoId());
     }
 
     @RequestMapping("/findByUserId")
-    public List<Review> findReviewByUserId(Integer userId) {
-        return reviewService.findReviewByUserId(userId);
+    //TODO userId获取方式待改
+    public List<Review> findReviewByUserId(@RequestBody User user) {
+        return reviewService.findReviewByUserId(user.getUserId());
     }
 }

@@ -1,5 +1,7 @@
 package com.fff.service.impl;
 
+import com.fff.commons.GetOrders;
+import com.fff.commons.GetReview;
 import com.fff.dao.ReviewMapper;
 import com.fff.dao.ReviewRepository;
 import com.fff.domain.Review;
@@ -48,8 +50,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> findReviewByVideoId(Integer videoId) {
-        List<Review> byVideoId = reviewRepository.findByVideoId(videoId);
+    public List<GetReview> findReviewByVideoId(Integer videoId) {
+        List<GetReview> byVideoId = reviewMapper.findByVideoId(videoId);
         if(byVideoId!=null){
             return byVideoId;
         }
