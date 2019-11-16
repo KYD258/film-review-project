@@ -6,7 +6,7 @@ import com.fff.domain.Commodity;
 import java.io.IOException;
 import java.util.List;
 
-public interface SearchService {
+public interface CommoditySearchService {
 //  添加索引
     void createIndex();
 //  导入数据

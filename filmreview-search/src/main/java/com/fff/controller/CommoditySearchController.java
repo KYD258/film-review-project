@@ -2,7 +2,7 @@ package com.fff.controller;
 
 import com.fff.Responses.CommodityResponse;
 import com.fff.domain.Commodity;
-import com.fff.service.SearchService;
+import com.fff.service.CommoditySearchService;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +11,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/search")
-public class SearchController {
+public class CommoditySearchController {
 
     @Autowired
-    private SearchService searchService;
+    private CommoditySearchService searchService;
 
     @RequestMapping("/toEs")
     public void toEs(){

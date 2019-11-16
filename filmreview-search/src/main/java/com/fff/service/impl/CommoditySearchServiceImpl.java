@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fff.Responses.CommodityResponse;
 import com.fff.dao.CommodityInterface;
 import com.fff.domain.Commodity;
-import com.fff.service.SearchService;
+import com.fff.service.CommoditySearchService;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SearchServiceImpl implements SearchService {
+public class CommoditySearchServiceImpl implements CommoditySearchService {
 
     @Autowired
     private RestHighLevelClient restHighLevelClient;
