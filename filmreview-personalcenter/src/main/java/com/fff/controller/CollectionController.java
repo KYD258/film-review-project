@@ -18,7 +18,7 @@ import java.util.List;
 public class CollectionController {
     @Autowired
     private CollectionService collectionService;
-    /*收藏与订阅*/
+    /*添加收藏*/
     @RequestMapping("/saveCollection")
     public R saveCollection(@RequestBody Video video, HttpSession session){
         Integer videoId = video.getVideoId();
@@ -26,6 +26,19 @@ public class CollectionController {
         Collection collection = new Collection();
         collection.setUserId(userId);
         collection.setVideoId(videoId);
+        video.setCollectionOrsubscription(1);
+        collectionService.saveCollection(collection);
+        return R.ok();
+    }
+    /*添加 订阅*/
+    @RequestMapping("/saveSubscription")
+    public R saveSubscription(@RequestBody Video video, HttpSession session){
+        Integer videoId = video.getVideoId();
+        Integer userId = (Integer)session.getAttribute("userId");
+        Collection collection = new Collection();
+        collection.setUserId(userId);
+        collection.setVideoId(videoId);
+        video.setCollectionOrsubscription(2);
         collectionService.saveCollection(collection);
         return R.ok();
     }
@@ -35,10 +48,26 @@ public class CollectionController {
         collectionService.deleteCollection(collection.getCollectionId());
         return R.ok();
     }
-    /*查询收藏或订阅*/
+    /*查询全部收藏或订阅*/
     @RequestMapping("/findAllCollection")
-    public List<Collection> findAllCollection(){
-        List<Collection> allCollection = collectionService.findAllCollection();
-        return allCollection;
+    public List<Video> findAllCollection(HttpSession session){
+        Integer userId = (Integer)session.getAttribute("userId");
+        List<Video> videos = collectionService.findAllCollection(userId);
+        return videos;
+    }
+    /*查询收藏1*/
+    @RequestMapping("/findCollection")
+    public List<Video> findCollection(HttpSession session){
+        Integer userId = (Integer)session.getAttribute("userId");
+        List<Video> videos = collectionService.findCollection(userId);
+        return videos;
+    }
+
+    /*查询订阅2*/
+    @RequestMapping("/findSubscription")
+    public List<Video> findSubscription(HttpSession session){
+        Integer userId = (Integer)session.getAttribute("userId");
+        List<Video> videos = collectionService.findSubscription(userId);
+        return videos;
     }
 }

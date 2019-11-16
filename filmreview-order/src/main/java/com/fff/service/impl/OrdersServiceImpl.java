@@ -3,7 +3,7 @@ package com.fff.service.impl;
 import com.fff.dao.UserOrdersMapper;
 import com.fff.dao.UserOrdersRepository;
 import com.fff.domain.UserOrders;
-import com.fff.responses.GetOrders;
+import com.fff.commons.GetOrders;
 import com.fff.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +29,22 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    public void updateStatus(String orderNum) {
+        userOrdersMapper.updateStatus(orderNum);
+    }
+
+    @Override
+    public UserOrders findByOrderNum(String orderNum) {
+        UserOrders byOrderNum = userOrdersRepository.findByOrderNum(orderNum);
+        return byOrderNum;
+    }
+
+    @Override
+    public Double findPriceByUserId(Integer userId) {
+        return userOrdersMapper.findPriceByUserId(userId);
+    }
+
+    @Override
     public List<GetOrders> payOrder(Integer userId) {
         List<GetOrders> getOrders = userOrdersMapper.payOrder(userId);
         return getOrders;
@@ -46,8 +62,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public UserOrders addOrder(UserOrders userOrders) {
-        UserOrders orders = userOrdersRepository.save(userOrders);
-        return orders;
+    public void addOrder(UserOrders userOrders) {
+        userOrdersRepository.save(userOrders);
     }
 }

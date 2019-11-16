@@ -1,4 +1,4 @@
-package com.fff.responses;
+package com.fff.commons;
 
 import lombok.Data;
 

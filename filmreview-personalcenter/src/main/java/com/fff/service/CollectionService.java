@@ -1,6 +1,7 @@
 package com.fff.service;
 
 import com.fff.domain.Collection;
+import com.fff.domain.Video;
 
 import java.util.List;
 
@@ -10,5 +11,9 @@ public interface CollectionService {
     /*取消收藏或订阅*/
     void deleteCollection(Integer collectionId);
     /*查询收藏或订阅*/
-    List<Collection> findAllCollection();
+    List<Video> findAllCollection(Integer userId);
+    /*查询收藏1*/
+    List<Video> findCollection(Integer userId);
+    /*查询订阅2*/
+    List<Video> findSubscription(Integer userId);
 }
