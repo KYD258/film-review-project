@@ -4,13 +4,14 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "video")
-public class Video {
-    @javax.persistence.Id
+public class Video implements Serializable {
+    @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     @Column(name = "video_id")
     private Integer videoId;
@@ -39,12 +40,12 @@ public class Video {
     private Integer visible;
     @Column(name = "video_pic")
     private String videoPic;
-    @Column(name = "showIndex")
+    @Column(name = "show_index")
     private Integer showIndex;
     @Column(name = "create_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date create_time;
-    @Column(name = "collectionOrsubscription")
+    private Date createTime;
+    @Column(name = "collection_orsubscription")
     private Integer collectionOrsubscription;
     @Column(name = "video_status")
     private Integer videoStatus;
