@@ -19,7 +19,7 @@ public class CommoditySearchController {
     @RequestMapping("/toEs")
     public void toEs(){
         searchService.createIndex();
-        searchService.toEs();
+//        searchService.toEs();
     }
 
     @RequestMapping("/saveCommodityToEs")
@@ -40,8 +40,9 @@ public class CommoditySearchController {
         return searchService.updateCommodityInEs(commodity);
     }
 
-    @RequestMapping("/searchCommodity/{keys}/{page}/{size}")
-    public CommodityResponse searchCommodity(@PathVariable("keys")String keys,@PathVariable("page")Integer page,@PathVariable("size")Integer size){
+    @RequestMapping(value = "/searchCommodity",method = RequestMethod.POST)
+    public CommodityResponse searchCommodity(@RequestParam("keys") String keys, @RequestParam("page") Integer page, @RequestParam("size")Integer size){
+        System.out.println(keys);
         CommodityResponse commodityResponse = searchService.selectCommodityByPage(page, size, keys);
         return commodityResponse;
     }

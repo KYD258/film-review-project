@@ -26,6 +26,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -218,7 +219,7 @@ public class VideoSearchServiceImpl implements VideoSearchService {
         searchSourceBuilder.from((page-1)*size);
         MultiMatchQueryBuilder multiMatchQueryBuilder =
                 QueryBuilders.multiMatchQuery(keys,"videoName", "videoDirector", "videoRole", "videoProducer", "videoLanguage", "videoType");
-        SearchSourceBuilder sourceBuilder = searchSourceBuilder.query(multiMatchQueryBuilder);
+        SearchSourceBuilder sourceBuilder = searchSourceBuilder.query(multiMatchQueryBuilder.field("videoName",10));
         searchRequest.source(sourceBuilder);
         SearchResponse response = null;
         try {
