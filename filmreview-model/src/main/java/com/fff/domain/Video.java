@@ -1,5 +1,6 @@
 package com.fff.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,8 +30,9 @@ public class Video implements Serializable {
     private Integer videoGrade;
     @Column(name = "video_language")
     private String videoLanguage;
-    @Column(name = "video_showTime")
+    @Column(name = "video_show_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date videoShowTime;
     @Column(name = "video_length")
     private Integer videoLength;
@@ -44,11 +46,14 @@ public class Video implements Serializable {
     private Integer showIndex;
     @Column(name = "create_time")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date createTime;
     @Column(name = "collection_orsubscription")
     private Integer collectionOrsubscription;
     @Column(name = "video_status")
     private Integer videoStatus;
+    @Column(name = "video_url")
+    private String videoUrl;
 
 
 }
