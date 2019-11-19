@@ -4,8 +4,11 @@ import com.fff.commons.GetOrders;
 import com.fff.commons.GetReview;
 import com.fff.dao.ReviewMapper;
 import com.fff.dao.ReviewRepository;
+import com.fff.dao.UserReviewRepository;
 import com.fff.domain.Review;
+import com.fff.domain.UserReview;
 import com.fff.service.ReviewService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +20,27 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewRepository reviewRepository;
     @Autowired
     private ReviewMapper reviewMapper;
+    @Autowired
+    private UserReviewRepository userReviewRepository;
 
-
+    //TODO userId获取方式待改
     @Override
-    public void saveReview(Review review) {
-         reviewRepository.save(review);
+    public Review saveReview(Review review) {
+        Integer userId=2;
+        Integer reviewId=findCount(review.getVideoId(),userId);
+        if(reviewId==null) {
+            reviewRepository.save(review);
+            UserReview userReview = new UserReview();
+            userReview.setReviewId(review.getReviewId());
+            userReview.setUserId(userId);
+            userReviewRepository.save(userReview);
+            return review;
+        }else{
+            review.setReviewId(reviewId);
+            Review review1 = updateReview(review);
+            return review1;
+        }
+
     }
 
     @Override
@@ -58,11 +77,28 @@ public class ReviewServiceImpl implements ReviewService {
         return null;
     }
 
+    //TODO userId获取方式待改
     @Override
     public List<Review> findReviewByUserId(Integer userId) {
         List<Review> byUserId = reviewMapper.findByUserId(userId);
         if(byUserId!=null){
             return byUserId;
+        }
+        return null;
+    }
+
+    //TODO userId获取方式待改
+    @Override
+    public Integer findCount(@Param("videoId") Integer videoId, @Param("userId") Integer userId) {
+        return reviewMapper.findCount(videoId,userId);
+    }
+
+    //TODO userId获取方式待改
+    @Override
+    public Review findReview(@Param("videoId") Integer videoId, @Param("userId") Integer userId) {
+        Review review = reviewMapper.findReview(videoId, userId);
+        if(review!=null){
+            return review;
         }
         return null;
     }
