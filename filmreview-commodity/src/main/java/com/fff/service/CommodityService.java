@@ -1,5 +1,6 @@
 package com.fff.service;
 
+import com.fff.Responses.CommodityResponse;
 import com.fff.domain.Commodity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +10,7 @@ public interface CommodityService{
 
     boolean saveCommodity(Commodity commodity);
 //  查询所有
-    List<Commodity> findCommodity();
+    CommodityResponse findCommodity(Integer page, Integer size);
 //  根据id删除
     boolean deleteCommodityById(Integer id);
 //  修改

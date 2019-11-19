@@ -1,16 +1,18 @@
 package com.fff.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.fff.Responses.CommodityResponse;
 import com.fff.dao.CommodityMapper;
 import com.fff.dao.SearchInterface;
 import com.fff.domain.Commodity;
 import com.fff.service.CommodityService;
 import com.fff.utils.UploadUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -39,8 +41,13 @@ public class CommodityServiceImpl implements CommodityService {
     }
 
     @Override
-    public List<Commodity> findCommodity() {
-        return commodityMapper.findCommodity();
+    public CommodityResponse findCommodity(Integer page, Integer size) {
+        Page<Object> startPage = PageHelper.startPage(page, size);
+        PageInfo<Commodity> pageInfo = new PageInfo<>(commodityMapper.findCommodity());
+        CommodityResponse commodityResponse = new CommodityResponse();
+        commodityResponse.setCommodityList(pageInfo.getList());
+        commodityResponse.setTotal(pageInfo.getTotal());
+        return commodityResponse;
     }
 
     @Override

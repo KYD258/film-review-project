@@ -71,7 +71,7 @@
             <if test="commodityPrice != null and commodityPrice != ''">
                 commodity_price = #{commodityPrice},
             </if>
-            <if test="outTime != null and outTime != ''">
+            <if test="outTime != null">
                 outTime = #{outTime},
             </if>
             <if test="commodityInfo1 != null and commodityInfo1 != ''">

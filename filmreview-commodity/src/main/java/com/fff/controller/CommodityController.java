@@ -1,5 +1,6 @@
 package com.fff.controller;
 
+import com.fff.Responses.CommodityResponse;
 import com.fff.commons.R;
 import com.fff.domain.Commodity;
 import com.fff.service.CommodityService;
@@ -7,19 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/commodity")
-public class CommodityController {
+public class CommodityController{
 
     @Autowired
     private CommodityService commodityService;
 
-    @RequestMapping("/getCommodityData")
-    public List<Commodity> getCommodityData(){
-        List<Commodity> commodityList = commodityService.findCommodity();
-        return commodityList;
+    @RequestMapping("/getCommodityData/{page}/{size}")
+    public CommodityResponse getCommodityData(@PathVariable("page") Integer page, @PathVariable("size")Integer size){
+        CommodityResponse commodityResponse = commodityService.findCommodity(page, size);
+        return commodityResponse;
     }
 
     @RequestMapping("/saveCommodity")
@@ -46,6 +45,7 @@ public class CommodityController {
 
     @RequestMapping("/updateCommodity")
     public R updateCommodity(@RequestBody Commodity commodity){
+        System.out.println(commodity.getOutTime());
         if (commodityService.updateCommodity(commodity)){
             return R.ok();
         }
