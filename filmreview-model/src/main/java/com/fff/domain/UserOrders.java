@@ -11,7 +11,7 @@ public class UserOrders {
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer Id;
+    private Integer id;
     @Column(name = "user_id")
     private Integer userId;
     @Column(name = "order_num")
