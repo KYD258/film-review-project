@@ -49,6 +49,7 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     @Override
     public Boolean saveVideo(Video video) {
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+        video.setCreateTime(new Date());
         Video save = videoRepository.save(video);
         if (save != null){
             System.out.println(save);
@@ -94,9 +95,13 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     }
 
     @Override
-    public List<Video> findVideo() {
-        List<Video> videoList = videoRepository.findAll();
-        return videoList;
+    public VideoResponse findVideo(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Video> all = videoRepository.findAll(pageable);
+        VideoResponse videoResponse = new VideoResponse();
+        videoResponse.setVideoList(all.getContent());
+        videoResponse.setVideoTotal(all.getTotalElements());
+        return videoResponse;
     }
 
     @Override
@@ -113,17 +118,19 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     public List<Video> findVideoByShowTime() {
         List<Video> videoList = null;
         Set<String> videoIndex = redisUtils.ZRevRange("videoIndex1", 0, -1);
-        if (videoIndex !=null && !"noData".equals(videoIndex)){
+        if (!videoIndex.isEmpty() && !"noData".equals(videoIndex)){
             String jsonString = JSON.toJSONString(videoIndex);
             videoList = JSONObject.parseArray(jsonString, Video.class);
             return videoList;
         }
         Sort sort = new Sort(Sort.Direction.ASC, "videoShowTime");
         videoList = videoRepository.findAll(sort);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if (videoList != null){
             for (Video video : videoList) {
-                Long showTime = Long.parseLong(format.format(video.getVideoShowTime()));
+                Date videoShowTime = video.getVideoShowTime();
+//                Long showTime = Long.parseLong(format.format(video.getVideoShowTime()));
+                long showTime = videoShowTime.getTime();
                 redisTemplate.opsForZSet().add("videoIndex1",video,showTime);
             }
         }else {
@@ -136,7 +143,7 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     public List<Video> findVideoByGander() {
         List<Video> videoList = null;
         Set<String> videoIndex = redisUtils.ZRevRange("videoIndex2", 0, -1);
-        if (videoIndex !=null && !"noData".equals(videoIndex)){
+        if (!videoIndex.isEmpty() && !"noData".equals(videoIndex)){
             String jsonString = JSON.toJSONString(videoIndex);
             videoList = JSONObject.parseArray(jsonString, Video.class);
             System.out.println(videoIndex);
@@ -162,12 +169,9 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
             logger.info("============>文件上传" + file.getName() + "------------>" + file.getOriginalFilename());
 //            String path = "D:\\project\\part4\\part4-project\\resource\\pic\\004.jpg";
             videoPath = videoUploadUtils.videoUpload(file);
-            String substring = videoPath.substring(videoPath.lastIndexOf("."));
-            if (".m3u8".equals(substring)){
-                return videoPath;
-            }
+            System.out.println(videoPath);
         }
-        return "success";
+        return videoPath;
     }
 
     @Override

@@ -15,7 +15,7 @@ public interface VideoService {
 
     Video findVideoById(Integer id);
 //    查询所有
-    List<Video> findVideo();
+    VideoResponse findVideo(Integer page, Integer size);
 //    图片地址
     String getVideoPicPath(MultipartFile file);
 //    按是否在首页展示搜索并按时间排序

@@ -1,5 +1,6 @@
 package com.fff.controller;
 
+import com.fff.Responses.VideoResponse;
 import com.fff.commons.R;
 import com.fff.domain.Video;
 import com.fff.service.VideoService;
@@ -16,10 +17,10 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
-    @RequestMapping("/findVideo")
-    public List<Video> findVideo(){
-        List<Video> videoList = videoService.findVideo();
-        return videoList;
+    @RequestMapping("/findVideo/{page}/{size}")
+    public VideoResponse findVideo(@PathVariable("page")Integer page,@PathVariable("size")Integer size){
+        VideoResponse videoResponse = videoService.findVideo(page, size);
+        return videoResponse;
     }
 
     @RequestMapping("/saveVideo")
