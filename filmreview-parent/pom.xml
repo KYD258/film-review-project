@@ -19,6 +19,8 @@
         <module>../filmreview-personalcenter</module>
         <module>../filmreview-order</module>
         <module>../filmreview-video</module>
+        <module>../filmreview-review</module>
+        <module>../filmreview-pay</module>
     </modules>
 
     <parent>
