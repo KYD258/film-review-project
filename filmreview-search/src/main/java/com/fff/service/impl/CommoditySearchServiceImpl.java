@@ -26,6 +26,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -168,23 +169,25 @@ public class CommoditySearchServiceImpl implements CommoditySearchService {
     public CommodityResponse selectCommodityByPage(Integer page, Integer size, String keys) {
         SearchRequest searchRequest = new SearchRequest("commodity");
         searchRequest.types("doc");
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.size(size);
-        searchSourceBuilder.from((page-1)*size);
-        MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(keys, "commodityName", "description").field("commodityName", 10);
-        SearchSourceBuilder sourceBuilder = searchSourceBuilder.query(queryBuilder);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        int from = (page-1)*size;
+        sourceBuilder.size(size);
+        sourceBuilder.from(from);
+
+        sourceBuilder.query(QueryBuilders.multiMatchQuery(keys,"commodityName","description").field("commodityName",10));
         searchRequest.source(sourceBuilder);
-        SearchResponse searchResponse = null;
+        sourceBuilder.sort("outTime",SortOrder.DESC);
+        SearchResponse response = null;
         try {
-            searchResponse = restHighLevelClient.search(searchRequest);
+            response = restHighLevelClient.search(searchRequest);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SearchHits hits = searchResponse.getHits();
-        long totalHits = hits.totalHits;
-        SearchHit[] searchHits = hits.getHits();
+        SearchHits responseHits = response.getHits();
+        SearchHit[] hits = responseHits.getHits();
+        long totalHits = responseHits.totalHits;
         List<Commodity> list = new ArrayList<>();
-        for (SearchHit searchHit : searchHits) {
+        for (SearchHit searchHit : hits) {
             Map<String, Object> sourceAsMap = searchHit.getSourceAsMap();
             Object json = JSON.toJSON(sourceAsMap);
             Commodity commodity = JSONObject.toJavaObject((JSON) json, Commodity.class);

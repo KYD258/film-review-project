@@ -57,7 +57,7 @@ public class VideoUploadUtils {
 //        String eTag = result.getETag();
         logger.info("--------------->上传成功, eTag = " + result.getETag());
         ossClient.shutdown();
-        URL url = ossClient.generatePresignedUrl(bucketName, file.getName(), expiration);
-        return url.toString();
+        String url = "http://" + bucketName + "." + endpoint + "/" + dir + filename;
+        return url;
     }
 }

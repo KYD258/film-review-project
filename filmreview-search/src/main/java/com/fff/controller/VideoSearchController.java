@@ -44,9 +44,10 @@ public class VideoSearchController {
         videoSearchService.updateVideoInEs(video);
     }
 
-    @RequestMapping("/selectVideoByPage/{page}/{size}/{keys}")
-    public VideoResponse selectVideoByPage(@PathVariable("page")Integer page, @PathVariable("size")Integer size, @PathVariable("keys")String keys){
-        VideoResponse videoResponse = videoSearchService.selectVideoByPage(page, size, keys);
+    @RequestMapping(value = "/selectVideoByPage",method = RequestMethod.POST)
+    public VideoResponse selectVideoByPage(@RequestParam("page")Integer page,@RequestParam("size")Integer size,@RequestParam("keys")String keys){
+        System.out.println(keys);
+        VideoResponse videoResponse = videoSearchService.selectVideoByPage(page,size,keys);
         return videoResponse;
     }
 }

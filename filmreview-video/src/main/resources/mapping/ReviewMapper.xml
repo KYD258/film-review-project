@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <!--public GetReview countGrade(Video video);-->
+<mapper namespace="com.fff.dao.ReviewMapper">
+    <resultMap id="ResultMap" type="com.fff.commons.GetReview">
+        <id property="reviewId" column="review_id"></id>
+        <result property="reviewContent" column="review_content"></result>
+        <result property="reviewCreateTime" column="review_create_time"></result>
+        <result property="userName" column="user_name"></result>
+        <result property="userName" column="user_name"></result>
+        <result property="userPic" column="user_pic"></result>
+        <result property="reviewGrade" column="review_grade"></result>
+    </resultMap>
+
+    <select id="countGrade"  resultType="java.lang.Float" parameterType="java.lang.Integer">
+     select  ROUND(AVG(r.review_grade),2)
+      from user u,user_review ur,review r
+      where u.user_id=ur.user_id and ur.review_id=r.review_id and r.video_id=#{videoId}
+    </select>
+</mapper>

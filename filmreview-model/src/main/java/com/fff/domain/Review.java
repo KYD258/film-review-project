@@ -21,5 +21,7 @@ public class Review {
     private Date reviewCreateTime;
     @Column(name = "video_id")
     private Integer videoId;
+    @Column(name = "review_grade")
+    private Integer reviewGrade;
 
 }

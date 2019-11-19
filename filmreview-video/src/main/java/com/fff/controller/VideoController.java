@@ -1,5 +1,6 @@
 package com.fff.controller;
 
+import com.fff.Responses.VideoResponse;
 import com.fff.commons.R;
 import com.fff.domain.Video;
 import com.fff.service.VideoService;
@@ -16,10 +17,10 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
-    @RequestMapping("/findVideo")
-    public List<Video> findVideo(){
-        List<Video> videoList = videoService.findVideo();
-        return videoList;
+    @RequestMapping("/findVideo/{page}/{size}")
+    public VideoResponse findVideo(@PathVariable("page")Integer page,@PathVariable("size")Integer size){
+        VideoResponse videoResponse = videoService.findVideo(page, size);
+        return videoResponse;
     }
 
     @RequestMapping("/saveVideo")
@@ -57,14 +58,14 @@ public class VideoController {
         return picPath;
     }
 
-    @RequestMapping("/getDataByShowTime")
-    public List<Video> getDataByShowTime(){
-        return videoService.findVideoByShowTime();
+    @RequestMapping("/getDataByShowTime/{page}/{size}")
+    public VideoResponse getDataByShowTime(@PathVariable("page") Integer page, @PathVariable("size") Integer size){
+        return videoService.findVideoByShowTime(page,size);
     }
 
-    @RequestMapping("/getDataByVideoGander")
-    public List<Video> getDataByVideoGander(){
-        return videoService.findVideoByGander();
+    @RequestMapping("/getDataByVideoGander/{page}/{size}")
+    public VideoResponse getDataByVideoGander(@PathVariable("page") Integer page, @PathVariable("size") Integer size){
+        return videoService.findVideoByGander(page,size);
     }
 
 //    获取视频地址

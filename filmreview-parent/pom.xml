@@ -19,6 +19,8 @@
         <module>../filmreview-personalcenter</module>
         <module>../filmreview-order</module>
         <module>../filmreview-video</module>
+        <module>../filmreview-review</module>
+        <module>../filmreview-pay</module>
     </modules>
 
     <parent>
@@ -167,6 +169,11 @@
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>1.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>2.9.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
