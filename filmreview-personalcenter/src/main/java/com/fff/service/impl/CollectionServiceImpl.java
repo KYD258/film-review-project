@@ -37,8 +37,11 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public void deleteCollection(Integer collectionId) {
-        collectionRepository.deleteById(collectionId);
+    public void deleteCollection(Collection collection) {
+
+        //collectionRepository.deleteById(collectionId);
+        //collectionRepository.delete(collection);
+        collectionMapper.deleteCollection(collection);
     }
 
     @Override
