@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class VideoResponse {
-    private List<Video> videoList;
+public class VideoResponse<T> {
+    private List<T> videoList;
     private Long videoTotal;
 }

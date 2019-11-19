@@ -115,50 +115,73 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     }
 
     @Override
-    public List<Video> findVideoByShowTime() {
+    public VideoResponse findVideoByShowTime(Integer page, Integer size) {
+        Pageable pages=PageRequest.of(page-1,size);
+
         List<Video> videoList = null;
-        Set<String> videoIndex = redisUtils.ZRevRange("videoIndex1", 0, -1);
-        if (!videoIndex.isEmpty() && !"noData".equals(videoIndex)){
+        VideoResponse<Video> r=new VideoResponse();
+        Page<Video> all=videoRepository.findAll(pages);
+        //Sort sort = new Sort(Sort.Direction.ASC, "videoShowTime");
+        //videoList = videoRepository.findAll(sort);
+        //PageRequest pageable = new PageRequest(page - 1, size,sort);
+        //System.out.println(pageable+"////");
+        //Page<Video> all = videoRepository.findAll(pageable);
+
+        Integer index = (page - 1) * size;
+        videoList = videoRepository.findAllByShowTimeByPage(index, size);
+
+        //System.out.println(all.getTotalElements()+"333");
+        //videoList = all.getContent();
+        r.setVideoTotal(all.getTotalElements());
+        // System.out.println(all.getTotalElements());
+        Set<String> videoIndex = redisUtils.ZRevRange(page+"videoIndex1", 0, -1);
+        if (videoIndex !=null && !"noData".equals(videoIndex) && !videoIndex.isEmpty()){
             String jsonString = JSON.toJSONString(videoIndex);
             videoList = JSONObject.parseArray(jsonString, Video.class);
-            return videoList;
+            r.setVideoList(videoList);
+
+            return r;
         }
-        Sort sort = new Sort(Sort.Direction.ASC, "videoShowTime");
-        videoList = videoRepository.findAll(sort);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        r.setVideoList(videoList);
         if (videoList != null){
             for (Video video : videoList) {
-                Date videoShowTime = video.getVideoShowTime();
-//                Long showTime = Long.parseLong(format.format(video.getVideoShowTime()));
-                long showTime = videoShowTime.getTime();
-                redisTemplate.opsForZSet().add("videoIndex1",video,showTime);
+                long showTime = video.getVideoShowTime().getTime();
+                redisTemplate.opsForZSet().add(page+"videoIndex1",video,showTime);
             }
         }else {
-            redisUtils.ZSet("videoIndex1","noData",1);
+            redisUtils.ZSet(page+"videoIndex1","noData",1);
         }
-        return videoList;
+        return r;
     }
 
     @Override
-    public List<Video> findVideoByGander() {
+    public VideoResponse findVideoByGander(Integer page, Integer size) {
+        Pageable pages=PageRequest.of(page-1,size);
         List<Video> videoList = null;
-        Set<String> videoIndex = redisUtils.ZRevRange("videoIndex2", 0, -1);
-        if (!videoIndex.isEmpty() && !"noData".equals(videoIndex)){
+        VideoResponse<Video> r=new VideoResponse();
+        Page<Video> all=videoRepository.findAll(pages);
+        Integer index = (page - 1) * size;
+        videoList = videoRepository.findAllByGradeByPage(index,size);
+        r.setVideoTotal(all.getTotalElements());
+        Set<String> videoIndex = redisUtils.ZRevRange(page+"videoIndex2", 0, -1);
+        if (videoIndex !=null && !"noData".equals(videoIndex) && !videoIndex.isEmpty()){
             String jsonString = JSON.toJSONString(videoIndex);
             videoList = JSONObject.parseArray(jsonString, Video.class);
-            System.out.println(videoIndex);
-            return videoList;
+            r.setVideoList(videoList);
+
+            return r;
         }
-        Sort sort = new Sort(Sort.Direction.ASC, "videoGrade");
-        videoList = videoRepository.findAll(sort);
+//        Sort sort = new Sort(Sort.Direction.ASC, "videoGrade");
+//        videoList = videoRepository.findAll(sort);
+        r.setVideoList(videoList);
         if (videoList != null){
             for (Video video : videoList) {
-                redisTemplate.opsForZSet().add("videoIndex2",video,video.getVideoGrade());
+                redisTemplate.opsForZSet().add(page+"videoIndex2",video,video.getVideoGrade());
             }
         }else {
-            redisUtils.ZSet("videoIndex2","noData",1);
+            redisUtils.ZSet(page+"videoIndex2","noData",1);
         }
-        return videoList;
+        return r;
     }
 
     @Override
