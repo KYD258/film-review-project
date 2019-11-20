@@ -95,10 +95,10 @@ public class PayController {
         }
         for (GetOrders c:commodities) {
 
-            StringBuffer append1 = stringBuffer.append(c.getCommodity_name());
+            StringBuffer append1 = stringBuffer.append(c.getCommodityName());
             s1 = append1.toString();
             UserOrders userOrders=new UserOrders();
-            userOrders.setCommodityId(c.getCommodity_id());
+            userOrders.setCommodityId(c.getCommodityId());
             //TODO 设置用户Id
             userOrders.setUserId(userId);
             userOrders.setOrderNum(orderNum);
