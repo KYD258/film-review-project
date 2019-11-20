@@ -17,19 +17,17 @@ public class User {
     @Column(name = "real_name")
     private String realName;
     @Column(name = "password")
-    private String password;
-    @Column(name = "age")
+    private String passWord;
     private Integer age;
-    @Column(name = "gender")
     private String gender;
     @Column(name = "user_pic")
     private String userPic;
-    @Column(name = "phone")
-    private Integer phone;
-    @Column(name = "email")
+    private String phone;
     private String email;
     @Column(name = "user_status")
     private Integer userStatus;
-    @Column(name = "address")
     private String address;
+
+
+
 }
