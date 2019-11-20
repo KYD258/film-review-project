@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fff.dao.CollectionMapper">
+
+    <resultMap id="videoMap" type="com.fff.domain.Video">
+    <id property="videoId" column="video_id"></id>
+    <result property="videoName" column="video_name"></result>
+    <result property="videoDirector" column="video_director"></result>
+    <result property="videoRole" column="video_role"></result>
+    <result property="videoProducer" column="video_producer"></result>
+    <result property="videoReview" column="video_review"></result>
+    <result property="videoGrade" column="video_grade"></result>
+    <result property="videoLanguage" column="video_language"></result>
+    <result property="videoShowTime" column="video_showTime"></result>
+    <result property="videoLength" column="video_length"></result>
+    <result property="videoType" column="video_type"></result>
+    <result property="visible" column="visible"></result>
+    <result property="videoPic" column="video_pic"></result>
+    <result property="showIndex" column="showIndex"></result>
+    <result property="createTime" column="create_time"></result>
+    <result property="collectionOrsubscription" column="collectionOrsubscription"></result>
+    <result property="videoStatus" column="video_status"></result>
+</resultMap>
+    <!--/*查询收藏1*/
+    List<Collection> findCollection();
+    /*查询订阅2*/
+    List<Collection> findSubscription();
+    /*查询收藏或订阅*/
+    List<Video> findAllCollection();
+    -->
+    <select id="findCollection" resultMap="videoMap">
+        select v.* from video v , collection c where
+        v.video_id=c.video_id and v.collectionOrsubscription=1 and c.user_id=#{userId}
+    </select>
+    <select id="findSubscription" resultMap="videoMap">
+        select v.* from video v , collection c where
+        v.video_id=c.video_id and v.collectionOrsubscription=2 and c.user_id=#{userId}
+    </select>
+    <select id="findAllCollection" resultMap="videoMap">
+        select v.* from video v , collection c where
+        v.video_id=c.video_id and c.user_id=#{userId}
+    </select>
+    <!--void deleteCollection(Collection collection);-->
+    <delete id="deleteCollection" parameterType="com.fff.domain.Collection">
+        delete from collection where video_id=#{videoId} and user_id=#{userId}
+    </delete>
+</mapper>

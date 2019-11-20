@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fff.dao.CreationMapper">
+
+    <resultMap id="creationMap" type="com.fff.commons.GetAllCreation">
+        <id property="creationId" column="creation_id"></id>
+        <result property="creationPic" column="creation_pic"></result>
+        <result property="article" column="article"></result>
+        <result property="creationStatus" column="creation_status"></result>
+        <result property="userName" column="user_name"></result>
+        <result property="userPic" column="user_pic"></result>
+
+    </resultMap>
+    <!-- /*查询所有动态*/
+    List<GetAllCreation> getCreationAllMessage();-->
+    <select id="getCreationAllMessage" resultMap="creationMap">
+        SELECT * FROM user u, creation c , user_creation uc WHERE
+          u.user_id=uc.user_id and uc.creation_id=c.creation_id ORDER BY c.creation_id DESC
+    </select>
+    <!--List<GetAllCreation> findUserCreation(Integer userId);-->
+    <select id="findUserCreation" resultMap="creationMap">
+        SELECT * FROM user u, creation c , user_creation uc WHERE
+          u.user_id=uc.user_id and uc.creation_id=c.creation_id and u.user_id=#{userId} ORDER BY c.creation_id DESC
+    </select>
+</mapper>

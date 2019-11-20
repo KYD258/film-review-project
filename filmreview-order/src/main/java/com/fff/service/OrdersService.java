@@ -1,7 +1,7 @@
 package com.fff.service;
 
 import com.fff.domain.UserOrders;
-import com.fff.responses.GetOrders;
+import com.fff.commons.GetOrders;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ public interface OrdersService {
     *
     *
     * */
-    void deleteOrderByOrderId(Integer id);
+    public void deleteOrderByOrderId(Integer id);
 
     /*订单的添加*/
-    public UserOrders addOrder(UserOrders userOrders) ;
+    public void addOrder(UserOrders userOrders) ;
 
     /*全部订单查询*/
     List<GetOrders> findAllOrder(Integer userId);
@@ -23,4 +23,11 @@ public interface OrdersService {
     List<GetOrders> payOrder(Integer userId);
 
     List<GetOrders> noPayOrder(Integer userId);
+
+    /*订单的修改*/
+    public void updateStatus(String orderNum);
+
+    public UserOrders findByOrderNum(String orderNum);
+
+    Double findPriceByUserId(Integer userId);
 }

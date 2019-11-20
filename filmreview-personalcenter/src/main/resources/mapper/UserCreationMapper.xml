@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fff.dao.UserCreationMapper">
+
+    <!-- List<Creation> findAllUserCreation(Integer userId);
+      @Column(name = "creation_id")
+    private Integer creationId;
+    @Column(name = "creation_pic")
+    private Integer creationPic;
+    @Column(name = "article")
+    private Integer article;
+    @Column(name = "creation_status")
+    private Integer creationStatus;
+    -->
+
+    <resultMap id="CreationMap" type="com.fff.domain.Creation">
+        <id property="creationId" column="creation_id"></id>
+        <result property="creationPic" column="creation_pic"></result>
+        <result property="article" column="article"></result>
+        <result property="creationStatus" column="creation_status"></result>
+    </resultMap>
+    <select id="findAllUserCreation" resultMap="CreationMap">
+        select c.* from creation c , user_creation uc
+        where c.creation_id=uc.creation_id and  user_id=@{userId}
+    </select>
+</mapper>
