@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @FeignClient(value = "filmreview-video", fallback = VideoFallBack.class)
 public interface VideoInterface {
-    @GetMapping("/video/findVideo")
+    @GetMapping("/video/selectVideoToEs")
     String getVideoData();
 }
