@@ -21,8 +21,10 @@ import org.elasticsearch.client.IndicesClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -53,79 +55,95 @@ public class VideoSearchServiceImpl implements VideoSearchService {
         CreateIndexRequest createIndexRequest = new CreateIndexRequest("video");
         createIndexRequest.settings(Settings.builder().put("number_of_shards",1).put("number_of_replicas",0));
         createIndexRequest.mapping("doc","{\n" +
-                "    \"properties\": {\n" +
-                "        \"videoId\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "    \"properties\":{\n" +
+                "        \"videoId\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
                 "        },\n" +
-                "        \"videoName\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"analyzer\": \"ik_max_word\",\n" +
-                "            \"search_analyzer\": \"ik_smart\"\n" +
+                "        \"videoName\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"analyzer\":\"ik_max_word\",\n" +
+                "            \"search_analyzer\":\"ik_smart\"\n" +
                 "        },\n" +
-                "        \"videoDirector\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"analyzer\": \"ik_max_word\",\n" +
-                "            \"search_analyzer\": \"ik_smart\"\n" +
+                "        \"videoDirector\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"analyzer\":\"ik_max_word\",\n" +
+                "            \"search_analyzer\":\"ik_smart\"\n" +
                 "        },\n" +
-                "        \"videoRole\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"analyzer\": \"ik_max_word\",\n" +
-                "            \"search_analyzer\": \"ik_smart\"\n" +
+                "        \"videoRole\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"analyzer\":\"ik_max_word\",\n" +
+                "            \"search_analyzer\":\"ik_smart\"\n" +
                 "        },\n" +
-                "        \"videoProducer\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"analyzer\": \"ik_max_word\",\n" +
-                "            \"search_analyzer\": \"ik_smart\"\n" +
+                "        \"videoProducer\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"analyzer\":\"ik_max_word\",\n" +
+                "            \"search_analyzer\":\"ik_smart\"\n" +
                 "        },\n" +
-                "        \"videoReview\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "        \"videoReview\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
                 "        },\n" +
-                "        \"videoLanguage\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"analyzer\": \"ik_max_word\",\n" +
-                "            \"search_analyzer\": \"ik_smart\"\n" +
+                "        \"videoLanguage\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"analyzer\":\"ik_max_word\",\n" +
+                "            \"search_analyzer\":\"ik_smart\"\n" +
                 "        },\n" +
-                "        \"videoGrade\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "        \"videoGrade\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
                 "        },\n" +
-                "        \"videoShowTime\": {\n" +
-                "            \"type\": \"date\",\n" +
-                "            \"format\": \"yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis\"\n" +
+                "        \"videoShowTime\":{\n" +
+                "            \"type\":\"date\",\n" +
+                "            \"format\":\"yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis\"\n" +
                 "        },\n" +
-                "        \"videoLength\": {\n" +
-                "            \"type\": \"text\"\n" +
+                "        \"videoLength\":{\n" +
+                "            \"type\":\"text\"\n" +
                 "        },\n" +
-                "        \"videoType\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"analyzer\": \"ik_max_word\",\n" +
-                "            \"search_analyzer\": \"ik_smart\"\n" +
+                "        \"classify\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"analyzer\":\"ik_max_word\",\n" +
+                "            \"search_analyzer\":\"ik_smart\"\n" +
                 "        },\n" +
-                "        \"visible\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "        \"videoType\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"analyzer\":\"ik_max_word\",\n" +
+                "            \"search_analyzer\":\"ik_smart\"\n" +
                 "        },\n" +
-                "        \"showIndex\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "        \"visible\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
                 "        },\n" +
-                "        \"videoPic\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "        \"showIndex\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
                 "        },\n" +
-                "        \"collectionOrsubscription\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "        \"videoPic\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
                 "        },\n" +
-                "        \"videoStatus\": {\n" +
-                "            \"type\": \"text\",\n" +
-                "            \"index\": false\n" +
+                "        \"collectionOrsubscription\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
                 "        },\n" +
-                "        \"createTime\": {\n" +
-                "            \"type\": \"date\",\n" +
-                "            \"format\": \"yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis\"\n" +
+                "        \"videoStatus\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
+                "        },\n" +
+                "        \"createTime\":{\n" +
+                "            \"type\":\"date\",\n" +
+                "            \"format\":\"yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis\"\n" +
+                "        },\n" +
+                "        \"videoUrl\":{\n" +
+                "            \"type\":\"text\",\n" +
+                "            \"index\":false\n" +
+                "        },\n" +
+                "        \"studymodel\":{\n" +
+                "            \"type\":\"keyword\"\n" +
+                "        },\n" +
+                "        \"timestamp\":{\n" +
+                "            \"type\":\"date\",\n" +
+                "            \"format\":\"yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis\"\n" +
                 "        }\n" +
                 "    }\n" +
                 "}",XContentType.JSON);
@@ -144,7 +162,7 @@ public class VideoSearchServiceImpl implements VideoSearchService {
     }
 
     @Override
-    public Boolean toEs() {
+    public void toEs() {
         String videoData = videoInterface.getVideoData();
         if (videoData != null){
             List<Video> videoList = JSONObject.parseArray(videoData, Video.class);
@@ -159,12 +177,10 @@ public class VideoSearchServiceImpl implements VideoSearchService {
                     e.printStackTrace();
                 }
                 if (!response.isFragment()){
-                    return true;
+
                 }
-                return false;
             }
         }
-        return false;
     }
 
     @Override
@@ -243,6 +259,80 @@ public class VideoSearchServiceImpl implements VideoSearchService {
             videoResponse.setVideoTotal(totalHits);
             return videoResponse;
         }
+        return null;
+    }
+
+    @Override
+    public VideoResponse findVideoByClassify(Integer page, Integer size, String key) {
+        SearchRequest searchRequest = new SearchRequest("video");
+        searchRequest.types("doc");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(size);
+        searchSourceBuilder.from((page-1)*size);
+        searchSourceBuilder.query(QueryBuilders.termQuery("classify",key));
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse response = null;
+        try {
+            response = restHighLevelClient.search(searchRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (response != null){
+            SearchHits searchHits = response.getHits();
+            long totalHits = searchHits.totalHits;
+            SearchHit[] hits = searchHits.getHits();
+            List<Video> videoList = new ArrayList<>();
+            for (SearchHit hit : hits) {
+                Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                Object json = JSON.toJSON(sourceAsMap);
+                Video video = JSONObject.toJavaObject((JSON) json, Video.class);
+                videoList.add(video);
+            }
+            VideoResponse videoResponse = new VideoResponse();
+            videoResponse.setVideoList(videoList);
+            videoResponse.setVideoTotal(totalHits);
+            return videoResponse;
+        }
+        return null;
+    }
+
+    @Override
+    public VideoResponse findVideoByType(Integer page, Integer size, String classifyKey, String typeKey) {
+        SearchRequest searchRequest = new SearchRequest("video");
+        searchRequest.types("doc");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(size);
+        searchSourceBuilder.from((page-1)*size);
+        TermQueryBuilder queryBuilder = QueryBuilders.termQuery("classify", classifyKey);
+        MultiMatchQueryBuilder matchQueryBuilder = QueryBuilders.multiMatchQuery(typeKey, "videoType");
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.must(queryBuilder);
+        boolQueryBuilder.must(matchQueryBuilder);
+        searchSourceBuilder.query(boolQueryBuilder);
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse response = null;
+        try {
+            response = restHighLevelClient.search(searchRequest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (response != null){
+            SearchHits searchHits = response.getHits();
+            long totalHits = searchHits.totalHits;
+            SearchHit[] hits = searchHits.getHits();
+            List<Video> videoList = new ArrayList<>();
+            for (SearchHit hit : hits) {
+                Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                Object json = JSON.toJSON(sourceAsMap);
+                Video video = JSONObject.toJavaObject((JSON) json, Video.class);
+                videoList.add(video);
+            }
+            VideoResponse videoResponse = new VideoResponse();
+            videoResponse.setVideoList(videoList);
+            videoResponse.setVideoTotal(totalHits);
+            return videoResponse;
+        }
+
         return null;
     }
 }

@@ -9,7 +9,7 @@ public interface VideoSearchService {
     //  添加索引
     Boolean createIndex();
     //  导入数据
-    Boolean toEs();
+    void toEs();
     //  增加视频
     void saveVideoToEs(Video video);
     //  删除视频
@@ -18,4 +18,8 @@ public interface VideoSearchService {
     void updateVideoInEs(Video video);
     //  es分页搜索视频
     VideoResponse selectVideoByPage(Integer page, Integer size, String keys);
+    //  根据classify查询
+    VideoResponse findVideoByClassify(Integer page, Integer size, String key);
+    //  根据type查询
+    VideoResponse findVideoByType(Integer page, Integer size, String classifyKey, String typeKey);
 }

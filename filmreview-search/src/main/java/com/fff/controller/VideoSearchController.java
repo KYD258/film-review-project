@@ -22,11 +22,8 @@ public class VideoSearchController {
     }
 
     @RequestMapping("/toES")
-    public R toEs(){
-        if (videoSearchService.toEs()){
-            return R.ok();
-        }
-        return R.error();
+    public void toEs(){
+       videoSearchService.toEs();
     }
 
     @RequestMapping("/saveVideoToEs")
@@ -48,6 +45,18 @@ public class VideoSearchController {
     public VideoResponse selectVideoByPage(@RequestParam("page")Integer page,@RequestParam("size")Integer size,@RequestParam("keys")String keys){
         System.out.println(keys);
         VideoResponse videoResponse = videoSearchService.selectVideoByPage(page,size,keys);
+        return videoResponse;
+    }
+    @RequestMapping(value = "/findVideoByClassify",method = RequestMethod.POST)
+    public VideoResponse findVideoByClassify(@RequestParam("page")Integer page,@RequestParam("size")Integer size,@RequestParam("keys")String keys){
+        System.out.println(keys);
+        VideoResponse videoResponse = videoSearchService.findVideoByClassify(page, size, keys);
+        return videoResponse;
+    }
+    @RequestMapping(value = "/findVideoByType",method = RequestMethod.POST)
+    public VideoResponse findVideoByType(@RequestParam("page")Integer page,@RequestParam("size")Integer size,@RequestParam("classifyKey")String classifyKey, @RequestParam("typeKey")String typeKey){
+        System.out.println(classifyKey + "......." + typeKey);
+        VideoResponse videoResponse = videoSearchService.findVideoByType(page,size,classifyKey,typeKey);
         return videoResponse;
     }
 }
