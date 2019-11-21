@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/filmeview-user-business/filmeview-user-business.iml" filepath="$PROJECT_DIR$/filmeview-user-business/filmeview-user-business.iml" />
+      <module fileurl="file://$PROJECT_DIR$/filmreview-commodity/filmreview-commodity.iml" filepath="$PROJECT_DIR$/filmreview-commodity/filmreview-commodity.iml" />
       <module fileurl="file://$PROJECT_DIR$/filmreview-eureka-server/filmreview-eureka-server.iml" filepath="$PROJECT_DIR$/filmreview-eureka-server/filmreview-eureka-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/filmreview-model/filmreview-model.iml" filepath="$PROJECT_DIR$/filmreview-model/filmreview-model.iml" />
       <module fileurl="file://$PROJECT_DIR$/filmreview-parent/filmreview-parent.iml" filepath="$PROJECT_DIR$/filmreview-parent/filmreview-parent.iml" />

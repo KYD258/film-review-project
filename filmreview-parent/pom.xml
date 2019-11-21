@@ -21,6 +21,8 @@
         <module>../filmreview-video</module>
         <module>../filmreview-review</module>
         <module>../filmreview-pay</module>
+        <module>../filmeview-user-business</module>
+        <module>../filmreview-Oauth2-server</module>
     </modules>
 
     <parent>

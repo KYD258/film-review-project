@@ -6,6 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="filmeview-user-business" />
+        <module name="filmreview-commodity" />
         <module name="filmreview-eureka-server" />
         <module name="filmreview-model" />
         <module name="filmreview-springboot-admin" />
@@ -14,8 +16,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="filmeview-user-business" target="1.8" />
+      <module name="filmreview-commodity" target="1.8" />
       <module name="filmreview-eureka-server" target="1.8" />
       <module name="filmreview-model" target="1.8" />
+      <module name="filmreview-Oauth2-server" target="1.8" />
       <module name="filmreview-parent" target="1.8" />
       <module name="filmreview-springboot-admin" target="1.8" />
       <module name="filmreview-zipkin" target="1.8" />
