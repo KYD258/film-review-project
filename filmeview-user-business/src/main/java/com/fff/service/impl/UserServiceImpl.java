@@ -8,7 +8,6 @@ import com.fff.response.UserAndCode;
 import com.fff.service.UserService;
 import com.fff.sms.SmsSDKDemo;
 import com.fff.utils.Md5Utils;
-import org.apache.catalina.security.SecurityUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,8 +27,6 @@ public class UserServiceImpl implements UserService {
     private SmsSDKDemo smsSDKDemo;
     @Autowired
     private RedisTemplate redisTemplate;
-    @Autowired
-    private HttpSession session;
     @Autowired
     private UserMapper userMapper;
 
@@ -63,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void regByPhone(Code code) {
-        Object code1 = redisTemplate.opsForHash().get("code", code.getPhone());
+        Object code1 = redisTemplate.opsForValue().get("code");
         if (code==code1){
             User user=new User();
             user.setPhone(code.getPhone());
@@ -72,8 +68,6 @@ public class UserServiceImpl implements UserService {
             user.setPassWord(Md5Utils.getMd5Password("123456"));
             //暂时不填，七牛云搞好再set，其他为空
 //            user.setUserPic();
-            //存库，redis
-            redisTemplate.opsForHash().put("user",code.getPhone(),user);
             User save = userRepository.save(user);
         }
 
@@ -90,7 +84,7 @@ public class UserServiceImpl implements UserService {
         User user=userAndCode.getUser();
         int code=userAndCode.getCode();
         //判重
-        Object user1 = redisTemplate.opsForHash().get("user", user.getPhone());
+        Object user1 = redisTemplate.opsForValue().get("user");
         if (user1!=null&&!user1.toString().equals("empty")){
             return "用户已注册，请登录";
         }
@@ -99,10 +93,11 @@ public class UserServiceImpl implements UserService {
         if (one!=null&&one.isPresent()){
             return "用户已注册，请登录";
         }
-        Object code1 = redisTemplate.opsForHash().get("code", user.getPhone());
+        Object code1 = redisTemplate.opsForValue().get("code");
         Integer code2=null;
         if (code1!=null&&!code1.toString().equals("empty")){
-            code2=(Integer) code1;
+            Code code11 = (Code) code1;
+            code2=code11.getCode();
         }
         if (code2!=code){
             return "请核对验证码！";
@@ -111,7 +106,6 @@ public class UserServiceImpl implements UserService {
         String md5Password = Md5Utils.getMd5Password(user.getPassWord());
         user.setPassWord(md5Password);
         User save = userRepository.save(user);
-        redisTemplate.opsForHash().put("user",user.getPhone(),save);
         if (save!=null){
             return "注册成功";
         }
@@ -120,35 +114,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String loginByPhone(Code code) {
-        Object user1 = redisTemplate.opsForHash().get("user", code.getPhone());
-        Optional<User> ones =null;
-        if (user1!=null&&!user1.equals("empty")){
-            User user=new User();
-            user.setPhone(code.getPhone());
-            Example<User> example = Example.of(user);
-            ones = userRepository.findOne(example);
-        }
-        if (ones==null&&!ones.isPresent()){
+
+        User ones = userRepository.findByPhone(code.getPhone());
+        if (ones==null){
             this.regByPhone(code);
         }
-        Object code1 = redisTemplate.opsForHash().get("code", code.getPhone());
+        Object code1 = redisTemplate.opsForValue().get("code");
         Integer code2=null;
         if (code1!=null&&!code1.toString().equals("empty")){
-            code2=(Integer)code1;
+            Code code11 = (Code) code1;
+            code2=code11.getCode();
         }
         int code3 = code.getCode();
         if (code2==code3){
-            Object user = redisTemplate.opsForHash().get("user", code.getPhone());
-            Optional one =null;
-            if (user!=null&&user.toString().equals("empty")){
-                Example  example = Example.of(code.getPhone());
-                 one = userRepository.findOne(example);
-            }
-            User o =null;
-            if (one!=null){
-                o = (User)one.get();
-            }
-            session.setAttribute(session.getId(),o);
+           User ones2 = userRepository.findByPhone(code.getPhone());
+            redisTemplate.opsForValue().set("user",ones2);
             return "登陆成功！";
         }else{
             return "请核对验证码";
@@ -166,19 +146,14 @@ public class UserServiceImpl implements UserService {
             subject.login(token);
             // 获取返回的结果
            if (subject.isAuthenticated()){
-               Object uer = redisTemplate.opsForHash().get("user", user.getPhone());
-               Optional one =null;
-               if (user!=null&&user.toString().equals("empty")){
-                   Example  example = Example.of(user.getPhone());
-                   one = userRepository.findOne(example);
-               }
-               User o =null;
-               if (one!=null){
-                   o = (User)one.get();
-               }
+                   User one = userRepository.findByPhone(user.getPhone());
+                    if (one!=null){
+                        redisTemplate.opsForValue().set("user",one);
+                        return "success";
+                    }else {
+                        return "filed";
+                    }
 
-               session.setAttribute(session.getId(),o);
-               return "success";
            }
         } catch (Exception e) {
             e.printStackTrace();

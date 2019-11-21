@@ -13,22 +13,6 @@
     </select>
 
     <update id="updateUser" parameterType="com.fff.domain.User">
---          private Integer userId;
-        @Column(name = "user_name")
-        private String userName;
-        @Column(name = "real_name")
-        private String realName;
-        @Column(name = "password")
-        private String passWord;
-        private Integer age;
-        private String gender;
-        @Column(name = "user_pic")
-        private String userPic;
-        private String phone;
-        private String email;
-        @Column(name = "user_status")
-        private Integer userStatus;
-        private String address;
         update user
         <set>
             <if test="user_name != null||user_name!=''">
@@ -61,5 +45,6 @@
         </set>
         where user_id=#{userId}
     </update>
+
 
 </mapper>

@@ -5,18 +5,20 @@ import com.alibaba.fastjson.JSON;
 import com.fff.domain.Code;
 import com.fff.domain.User;
 import com.fff.response.UserAndCode;
-import com.fff.service.Oauth2Service;
 import com.fff.service.UserService;
-import com.fff.utils.SSOUtils;
 import com.fff.utils.UploadUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @RestController
@@ -26,11 +28,9 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private SSOUtils ssoUtils;
-    @Autowired
-    private Oauth2Service oauth2Service;
-    @Autowired
     private UploadUtils uploadUtils;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     //注册
     @RequestMapping("/userReg")
@@ -50,44 +50,31 @@ public class UserController {
     @RequestMapping("/loginByPhone")
     public String loginByPhone(@RequestBody Code code,
                                HttpServletRequest req,
-                               HttpServletResponse resp){
-        System.out.println(code+">>");
+                               HttpServletResponse resp,
+                               HttpSession session){
         String s = userService.loginByPhone(code);
         if (s.equals("登陆成功！")){
-            ssoUtils.login(req,resp,code.getPhone());
         }
         return s;
     }
 
     @RequestMapping("/loginByPassword")
-    public String loginByPassword(@RequestBody User user){
-        System.out.println(user+"==");
+    public String loginByPassword(@RequestBody User user,
+                                  HttpServletRequest req,
+                                  HttpServletResponse resp,
+                                  HttpSession session){
         String s = userService.loginByPassword(user);
+        if (s.equals("success")){
+
+        }
         return s;
     }
 
     @RequestMapping("/loginOut")
     public void loginOut(HttpServletRequest req, HttpServletResponse resp){
-        ssoUtils.loginOut(req,resp);
+         Subject subject=SecurityUtils.getSubject();
+         subject.logout();
     }
-
-//    阿里第三方登录
-//    @RequestMapping("/loginByAli")
-//    public String loginByAli(@RequestParam(name = "app_auth_code")String code) {
-//        String s = oauth2Service.AliLogin(code);
-//        System.out.println(code);
-//        System.out.println(s);
-//        return s;
-//
-//    }
-//    Git第三方登录
-//    @RequestMapping("/loginByGit")
-//    public String loginByGit(@RequestParam(name = "code")String code){
-//        String s = oauth2Service.GitLogin(code);
-//        System.out.println(code);
-//        System.out.println(s);
-//        return null;
-//    }
 
     @RequestMapping("/getPath")
     public String getPath(MultipartFile file){
@@ -133,7 +120,6 @@ public class UserController {
     public Boolean updateUser(@RequestBody User user){
         Boolean aBoolean = userService.updateUser(user);
         return  aBoolean;
-
     }
 
 

@@ -31,29 +31,9 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String phone = (String) authenticationToken.getPrincipal();
-        String password ="";
-        Object userByPhone = redisTemplate.opsForHash().get("user", phone);
-        if (userByPhone!=null&&!userByPhone.toString().equals("empty")){
-            User userByPhone1 = (User) userByPhone;
-            String passWord = userByPhone1.getPassWord();
-        }
-        User user=new User();
-        user.setPhone(phone);
-        Example<User> example=Example.of(user);
-        Optional<User> userOptional=userRepository.findOne(example);
-        if (userOptional!=null){
-            password = userOptional.get().getPassWord();
-        }
-        redisTemplate.opsForHash().put("user",user.getPhone(),"empty");
-        //设置固定时间删除，定时器
-        Timer timer=new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                redisTemplate.opsForHash().delete("user", user.getPhone());
-
-            }
-        },5000);
+        User byPhone = userRepository.findByPhone(phone);
+        String password =byPhone.getPassWord();
+        redisTemplate.opsForValue().set("user","empty",3000);
 
         SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(phone, password, ByteSource.Util.bytes("hello"), getName());
         return simpleAuthenticationInfo;

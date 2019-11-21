@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class SmsSDKDemo {
@@ -35,21 +36,21 @@ public class SmsSDKDemo {
 	    	Random random=new Random();
             int i = random.nextInt(9999);
             //存redis
-            redisTemplate.opsForHash().put("code",phoneNumber,i);
             Code code=new Code();
             code.setCode(i);
             code.setPhone(phoneNumber);
-            Code save = codeRepository.save(code);
+            redisTemplate.opsForValue().set("code",code);
+            redisTemplate.expire("code",3000,TimeUnit.SECONDS);
             //添加定时器，3分钟后过期！！！
-            Timer timer=new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    save.setCode(null);
-                    codeRepository.saveAndFlush(save);
-
-                }
-            },600000);
+//            Timer timer=new Timer();
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    save.setCode(null);
+//                    codeRepository.saveAndFlush(save);
+//
+//                }
+//            },600000);
             //普通单发,注意前面必须为【】符号包含，置于头或者尾部。
 	    singleSenderResult = singleSender.send(0, "86", phoneNumber, "【靓仔科技】尊敬的用户：您的验证码："+i+"，工作人员不会索取，请勿泄漏。", "", "");
 	    	System.out.println(singleSenderResult);
