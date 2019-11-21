@@ -58,14 +58,14 @@ public class VideoController {
         return picPath;
     }
 
-    @RequestMapping("/getDataByShowTime")
-    public List<Video> getDataByShowTime(){
-        return videoService.findVideoByShowTime();
+    @RequestMapping("/getDataByShowTime/{page}/{size}")
+    public VideoResponse getDataByShowTime(@PathVariable("page") Integer page, @PathVariable("size") Integer size){
+        return videoService.findVideoByShowTime(page,size);
     }
 
-    @RequestMapping("/getDataByVideoGander")
-    public List<Video> getDataByVideoGander(){
-        return videoService.findVideoByGander();
+    @RequestMapping("/getDataByVideoGander/{page}/{size}")
+    public VideoResponse getDataByVideoGander(@PathVariable("page") Integer page, @PathVariable("size") Integer size){
+        return videoService.findVideoByGander(page,size);
     }
 
 //    获取视频地址

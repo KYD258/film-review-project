@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fff.dao.UserMapper">
+    <update id="toVip" parameterType="java.lang.Integer">
+        update user set user_status=1 where user_id={userId}
+
+    </update>
+
+    <select id="havePms" resultType="java.lang.Integer">
+        select user_status from user where user_id=#{userId}
+    </select>
+
+    <update id="updateUser" parameterType="com.fff.domain.User">
+--          private Integer userId;
+        @Column(name = "user_name")
+        private String userName;
+        @Column(name = "real_name")
+        private String realName;
+        @Column(name = "password")
+        private String passWord;
+        private Integer age;
+        private String gender;
+        @Column(name = "user_pic")
+        private String userPic;
+        private String phone;
+        private String email;
+        @Column(name = "user_status")
+        private Integer userStatus;
+        private String address;
+        update user
+        <set>
+            <if test="user_name != null||user_name!=''">
+                user_name=#{userName},
+            </if>
+            <if test="real_name != null||real_name!=''">
+                real_name=#{realName},
+            </if>
+            <if test="password != null||password!=''">
+                password=#{passWord},
+            </if>
+            <if test="age != null||age!=''">
+                age=#{age},
+            </if>
+            <if test="gender != null||gender!=''">
+                gender=#{gender},
+            </if>
+            <if test="user_pic != null||user_pic!=''">
+                user_pic=#{userPic},
+            </if>
+            <if test="phone != null||phone!=''">
+                phone=#{phone},
+            </if>
+            <if test="email != null||email!=''">
+                email=#{email},
+            </if>
+            <if test="address != null||address!=''">
+                address=#{address},
+            </if>
+        </set>
+        where user_id=#{userId}
+    </update>
+
+</mapper>

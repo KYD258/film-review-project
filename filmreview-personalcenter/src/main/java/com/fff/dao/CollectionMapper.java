@@ -14,4 +14,6 @@ public interface CollectionMapper {
     List<Video> findSubscription(Integer userId);
     /*查询收藏或订阅*/
     List<Video> findAllCollection(Integer userId);
+
+    void deleteCollection(Collection collection);
 }

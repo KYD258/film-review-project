@@ -44,14 +44,20 @@ public class CollectionController {
     }
     /*取消收藏或订阅*/
     @RequestMapping("/deleteCollection")
-    public R deleteCollection(@RequestBody Collection collection){
-        collectionService.deleteCollection(collection.getCollectionId());
+    public R deleteCollection(@RequestBody Video video, HttpSession session){
+        Integer videoId = video.getVideoId();
+        Integer userId = (Integer)session.getAttribute("userId");
+        Collection collection = new Collection();
+        collection.setUserId(1);
+        collection.setVideoId(videoId);
+        collectionService.deleteCollection(collection);
         return R.ok();
     }
     /*查询全部收藏或订阅*/
     @RequestMapping("/findAllCollection")
     public List<Video> findAllCollection(HttpSession session){
         Integer userId = (Integer)session.getAttribute("userId");
+        userId=1;
         List<Video> videos = collectionService.findAllCollection(userId);
         return videos;
     }
@@ -59,7 +65,9 @@ public class CollectionController {
     @RequestMapping("/findCollection")
     public List<Video> findCollection(HttpSession session){
         Integer userId = (Integer)session.getAttribute("userId");
+        userId=1;
         List<Video> videos = collectionService.findCollection(userId);
+        System.out.println(videos);
         return videos;
     }
 
@@ -67,7 +75,9 @@ public class CollectionController {
     @RequestMapping("/findSubscription")
     public List<Video> findSubscription(HttpSession session){
         Integer userId = (Integer)session.getAttribute("userId");
+        userId=1;
         List<Video> videos = collectionService.findSubscription(userId);
+        System.out.println(videos);
         return videos;
     }
 }
