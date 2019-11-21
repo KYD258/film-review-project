@@ -54,6 +54,8 @@ public class Video implements Serializable {
     private Integer videoStatus;
     @Column(name = "video_url")
     private String videoUrl;
+    @Column(name = "classify")
+    private String classify;
 
 
 }
