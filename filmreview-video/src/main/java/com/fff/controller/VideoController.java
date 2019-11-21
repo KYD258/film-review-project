@@ -23,6 +23,11 @@ public class VideoController {
         return videoResponse;
     }
 
+    @RequestMapping("/selectVideoToEs")
+    public List<Video> selectVideoToEs(){
+        return videoService.selectVideoToEs();
+    }
+
     @RequestMapping("/saveVideo")
     public R saveVideo(@RequestBody Video video){
         if (videoService.saveVideo(video)){

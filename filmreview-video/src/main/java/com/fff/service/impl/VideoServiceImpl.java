@@ -48,7 +48,6 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     private Logger logger = LoggerFactory.getLogger(VideoServiceImpl.class);
     @Override
     public Boolean saveVideo(Video video) {
-        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
         video.setCreateTime(new Date());
         Video save = videoRepository.save(video);
         if (save != null){
@@ -63,7 +62,6 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     @Override
     @Transactional
     public Boolean deleteVideoById(Integer id) {
-        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
         if (videoRepository.deleteByVideoId(id) > 0){
             rabbitTemplate.setConfirmCallback(this);
             rabbitTemplate.convertAndSend("topicExchange.video","topic.videoDelete",id);
@@ -82,7 +80,6 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
     @Override
     public Boolean updateVideo(Video video) {
         if(video != null){
-            CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
             Video video1 = videoRepository.saveAndFlush(video);
             if (video1 != null){
                 rabbitTemplate.setConfirmCallback(this);
@@ -102,6 +99,15 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
         videoResponse.setVideoList(all.getContent());
         videoResponse.setVideoTotal(all.getTotalElements());
         return videoResponse;
+    }
+
+    @Override
+    public List<Video> selectVideoToEs() {
+        List<Video> videoList = videoRepository.findAll();
+        if (videoList !=null){
+            return videoList;
+        }
+        return null;
     }
 
     @Override
@@ -199,6 +205,7 @@ public class VideoServiceImpl implements VideoService, RabbitTemplate.ConfirmCal
 
     @Override
     public void confirm(CorrelationData correlationData, boolean b, String s) {
+        correlationData = new CorrelationData(UUID.randomUUID().toString());
         logger.info("uuid" + correlationData.getId() + "ack" + b + "cause" + s);
     }
 }
